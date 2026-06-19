@@ -86,18 +86,7 @@ export default function Landing() {
         perspective: '2000px',
       }}
     >
-      {/* Background Ambient Orbs */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 2 }}
-        className="absolute inset-0 pointer-events-none"
-      >
-        <div className="absolute top-[20%] left-[20%] w-[40vw] h-[40vw] rounded-full mix-blend-multiply blur-[100px] opacity-40 bg-blue-200 animate-blob-drift-1" />
-        <div className="absolute bottom-[20%] right-[20%] w-[35vw] h-[35vw] rounded-full mix-blend-multiply blur-[100px] opacity-40 bg-purple-200 animate-blob-drift-2" />
-        <div className="absolute top-[40%] left-[60%] w-[30vw] h-[30vw] rounded-full mix-blend-multiply blur-[100px] opacity-30 bg-cyan-200 animate-blob-drift-1" style={{ animationDelay: '-2s' }} />
-      </motion.div>
-
+      {/* Background Ambient Orbs Removed for Solid Grey Theme */}
       {/* Main Container - Ambient Floating */}
       <motion.div
         animate={{ y: [-8, 8, -8] }}
@@ -207,9 +196,7 @@ export default function Landing() {
               onClick={() => navigate(isAuthenticated ? '/dashboard' : '/register')}
               className="relative group cursor-pointer"
             >
-              <div 
-                className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full blur opacity-20 group-hover:opacity-40 transition-opacity duration-500" 
-              />
+              {/* Button Hover Glow Removed for Transparency */}
               <div
                 className="relative flex items-center gap-3 px-8 py-4 rounded-full overflow-hidden"
                 style={{
