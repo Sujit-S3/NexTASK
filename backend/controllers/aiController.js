@@ -1,7 +1,7 @@
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 
 // Initialize the SDK. We do this inside the function or globally if key is available.
-const getModel = (modelName = 'gemini-2.5-flash') => {
+const getModel = (modelName = process.env.GEMINI_MODEL || 'gemini-2.5-flash') => {
   if (!process.env.GEMINI_API_KEY) {
     throw new Error('GEMINI_API_KEY is not configured in the environment.');
   }
@@ -22,7 +22,7 @@ exports.suggestTaskBreakdown = async (req, res) => {
   }
 
   try {
-    const model = getModel('gemini-2.5-flash');
+    const model = getModel();
 
     const prompt = `
       You are an expert project manager and agile coach. 
@@ -85,7 +85,7 @@ exports.chat = async (req, res) => {
   try {
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
     const model = genAI.getGenerativeModel({ 
-      model: 'gemini-2.5-flash',
+      model: process.env.GEMINI_MODEL || 'gemini-2.5-flash',
       systemInstruction: systemInstruction || "You are an expert NexTASK AI assistant. You help project managers and developers break down tasks, plan sprints, and summarize progress. Format your responses in clean markdown. Be concise, professional, and actionable."
     });
 

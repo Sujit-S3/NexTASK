@@ -70,6 +70,8 @@ api.interceptors.response.use(
         localStorage.removeItem('tf_token');
         localStorage.removeItem('tf_user');
         localStorage.removeItem('tf_refresh');
+        // Dispatch custom event for graceful Redux logout
+        window.dispatchEvent(new Event('auth:logout'));
         window.location.href = '/login';
         return Promise.reject(refreshError);
       } finally {

@@ -38,8 +38,11 @@ export default function AIAssistantPanel() {
     setLoading(true);
 
     try {
-      // Use SSE for streaming response
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/ai/chat`, {
+      // Cleanly format the base URL to prevent duplicate /api paths
+      const rawApiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const baseUrl = rawApiUrl.endsWith('/api') ? rawApiUrl.slice(0, -4) : rawApiUrl;
+      
+      const response = await fetch(`${baseUrl}/api/ai/chat`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -52,7 +55,14 @@ export default function AIAssistantPanel() {
       });
 
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        let errorMsg = 'Network response was not ok';
+        try {
+          const errData = await response.json();
+          if (errData.message) errorMsg = errData.message;
+        } catch (e) {
+          // ignore json parse error
+        }
+        throw new Error(errorMsg);
       }
 
       const reader = response.body.getReader();
@@ -113,7 +123,16 @@ export default function AIAssistantPanel() {
       }
     } catch (error) {
       console.error('Chat error:', error);
-      setMessages(prev => [...prev, { role: 'model', parts: [{ text: "Sorry, I encountered an error. Please try again." }] }]);
+      
+      let displayMsg = error.message;
+      // Sanitize technical or quota errors into user-friendly messages
+      if (displayMsg.includes('429') || displayMsg.toLowerCase().includes('quota')) {
+        displayMsg = "You have reached your daily AI usage limit. Please take a break and try again later!";
+      } else if (displayMsg.includes('GoogleGenerativeAI') || displayMsg.includes('Network response was not ok')) {
+        displayMsg = "I'm currently experiencing technical difficulties. Please try again later.";
+      }
+      
+      setMessages(prev => [...prev, { role: 'model', parts: [{ text: `Sorry, ${displayMsg}` }] }]);
     } finally {
       setLoading(false);
     }
