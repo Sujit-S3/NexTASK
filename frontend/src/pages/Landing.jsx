@@ -82,7 +82,7 @@ export default function Landing() {
       onMouseLeave={handleMouseLeave}
       className="relative w-full h-screen overflow-hidden flex items-center justify-center selection:bg-indigo-500/30"
       style={{
-        background: 'linear-gradient(135deg, #f8f9fa 0%, #ced4da 100%)',
+        background: 'linear-gradient(135deg, #1f2937 0%, #111827 100%)',
         perspective: '2000px',
       }}
     >
