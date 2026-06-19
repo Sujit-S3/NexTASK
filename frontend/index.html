@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/src/assets/logo.png" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="NexTASK – Real-Time Task Management & Team Collaboration Platform. Manage tasks, collaborate with your team, and track progress in real time." />
+    <meta name="keywords" content="task management, team collaboration, project management, real-time, kanban" />
+    <meta name="author" content="NexTASK" />
+    <meta property="og:title" content="NexTASK – Real-Time Task Management" />
+    <meta property="og:description" content="Manage tasks and collaborate with your team in real time." />
+    <meta property="og:type" content="website" />
+    <meta name="theme-color" content="#6366f1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <title>NexTASK – Real-Time Task Management</title>
+  </head>
+  <body>
+    <!-- Apply saved theme BEFORE React renders to prevent flash -->
+    <script>
+      (function() {
+        var saved = localStorage.getItem('tf_theme');
+        var root = document.documentElement;
+        if (saved === 'light') { root.classList.remove('dark'); }
+        else { root.classList.add('dark'); localStorage.setItem('tf_theme', 'dark'); }
+      })();
+    </script>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
