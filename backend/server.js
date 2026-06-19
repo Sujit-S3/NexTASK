@@ -28,10 +28,13 @@ const aiRoutes = require('./routes/ai.routes');
 const app = express();
 const httpServer = http.createServer(app);
 
+// Get sanitized client URL
+const clientOrigin = (process.env.CLIENT_URL || 'http://localhost:5173').replace(/\r?\n|\r/g, '').trim();
+
 // ── Socket.IO ─────────────────────────────────────────────────────────────────
 const io = new Server(httpServer, {
   cors: {
-    origin: process.env.CLIENT_URL || 'http://localhost:5173',
+    origin: clientOrigin,
     methods: ['GET', 'POST'],
     credentials: true,
   },
@@ -50,7 +53,7 @@ app.use(xss());
 // ── CORS ──────────────────────────────────────────────────────────────────────
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || 'http://localhost:5173',
+    origin: clientOrigin,
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
