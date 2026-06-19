@@ -82,7 +82,7 @@ export default function Landing() {
       onMouseLeave={handleMouseLeave}
       className="relative w-full h-screen overflow-hidden flex items-center justify-center selection:bg-indigo-500/30"
       style={{
-        background: 'linear-gradient(135deg, #ffffff 0%, #e0f2fe 50%, #ede9fe 100%)',
+        background: 'linear-gradient(135deg, #f8f9fa 0%, #ced4da 100%)',
         perspective: '2000px',
       }}
     >
@@ -213,10 +213,9 @@ export default function Landing() {
               <div
                 className="relative flex items-center gap-3 px-8 py-4 rounded-full overflow-hidden"
                 style={{
-                  background: 'rgba(255, 255, 255, 0.4)',
-                  backdropFilter: 'blur(12px)',
-                  border: '1px solid rgba(255,255,255,0.8)',
-                  boxShadow: '0 8px 32px rgba(0,0,0,0.05), inset 0 2px 4px rgba(255,255,255,0.5)',
+                  background: 'transparent',
+                  border: '1px solid rgba(15,23,42,0.2)',
+                  boxShadow: 'none',
                 }}
               >
                 {/* Button Hover Ripple */}
