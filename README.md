@@ -1,4 +1,4 @@
-# NexTASK
+<img width="2880" height="1605" alt="image" src="https://github.com/user-attachments/assets/684a92f2-e515-4d33-a6bf-049eeec7d067" /># NexTASK
 
 🚀 **Live Demo:** https://nextask-frontend-kappa.vercel.app
 
@@ -93,7 +93,8 @@ Designed for modern teams, NexTASK combines intelligent task management, role-ba
 
 ## AI Assistant
 
-![AI Assistant](screenshots/ai-assistant.png)
+![AI Assistant]<img width="2880" height="1605" alt="image" src="https://github.com/user-attachments/assets/168ff418-8eab-48a2-8969-17a0f8ec652f" />
+)
 
 ## Team Management
 
