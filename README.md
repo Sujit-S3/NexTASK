@@ -81,33 +81,31 @@ Designed for modern teams, NexTASK combines intelligent task management, role-ba
 
 ## Dashboard
 
-![Dashboard](<img width="2885" height="1620" alt="image" src="https://github.com/user-attachments/assets/97da307c-0841-48fd-b5ac-f0ad8e5b4944" />
-)
+![Dashboard]<img width="2885" height="1620" alt="image" src="https://github.com/user-attachments/assets/97da307c-0841-48fd-b5ac-f0ad8e5b4944" />
+
 
 ## Analytics Dashboard
 
-![Analytics](<img width="2880" height="1605" alt="image" src="https://github.com/user-attachments/assets/051db55b-3f39-4eb1-acf2-9cf93df8bf43" />
-)
+![Analytics]<img width="2880" height="1605" alt="image" src="https://github.com/user-attachments/assets/051db55b-3f39-4eb1-acf2-9cf93df8bf43" />
+
 
 ## Task Management
 
-![Task Management](<img width="2880" height="1605" alt="image" src="https://github.com/user-attachments/assets/880a079e-0455-46b0-8e9d-05823c407a3d" />
-)
+![Task Management]<img width="2880" height="1605" alt="image" src="https://github.com/user-attachments/assets/880a079e-0455-46b0-8e9d-05823c407a3d" />
+
 
 ## AI Assistant
 
 ![AI Assistant]<img width="2880" height="1605" alt="image" src="https://github.com/user-attachments/assets/168ff418-8eab-48a2-8969-17a0f8ec652f" />
-)
+
 
 ## Team Management
 
-![Team Management](<img width="2880" height="1605" alt="image" src="https://github.com/user-attachments/assets/746cfafb-7edd-43e3-a757-372967a1bc13" />
-)
+![Team Management]<img width="2880" height="1605" alt="image" src="https://github.com/user-attachments/assets/746cfafb-7edd-43e3-a757-372967a1bc13" />
 
 ## User Profile
 
-![Profile](<img width="2880" height="1605" alt="image" src="https://github.com/user-attachments/assets/f8a4bcd5-0ee2-4089-9425-995e6a8cee18" />
-)
+![Profile]<img width="2880" height="1605" alt="image" src="https://github.com/user-attachments/assets/f8a4bcd5-0ee2-4089-9425-995e6a8cee18" />
 
 ---
 
