@@ -1,4 +1,4 @@
-<img width="2880" height="1605" alt="image" src="https://github.com/user-attachments/assets/684a92f2-e515-4d33-a6bf-049eeec7d067" /># NexTASK
+# NexTASK
 
 🚀 **Live Demo:** https://nextask-frontend-kappa.vercel.app
 
