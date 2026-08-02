@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sun, Moon, Menu, Search, Plus, Bell, X, Sparkles } from 'lucide-react';
+import { Sun, Moon, Search, Plus, Bell, X, Sparkles } from 'lucide-react';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useAI } from '../../context/AIContext';
 import { toggleMobileSidebar } from '../../store/uiSlice';

@@ -58,7 +58,9 @@ const initSocket = (io) => {
 
     // ─── Disconnect ───────────────────────────────────────────────────────
     socket.on('disconnect', () => {
-      if (socket.userId) {
+      // Only clear the online-status entry if it still points at *this* socket —
+      // otherwise a second tab's still-active connection gets wiped out.
+      if (socket.userId && onlineUsers.get(socket.userId) === socket.id) {
         onlineUsers.delete(socket.userId);
         io.emit('users:online', Array.from(onlineUsers.keys()));
         console.log(`🔌 User ${socket.userId} disconnected. Online: ${onlineUsers.size}`);

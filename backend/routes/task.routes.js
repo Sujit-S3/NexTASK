@@ -33,10 +33,10 @@ router.get('/stats', getTaskStats);
 // Tasks CRUD
 router.get('/', getTasks);
 router.get('/:id', getTaskById);
-router.post('/', createTaskValidation, validate, createTask);
+router.post('/', authorize('admin'), createTaskValidation, validate, createTask);
 router.put('/:id', updateTaskValidation, validate, updateTask);
 router.delete('/:id', authorize('admin'), deleteTask);
-router.patch('/:id/assign', assignTask);
+router.patch('/:id/assign', authorize('admin'), assignTask);
 
 // Comments (nested under tasks)
 router.get('/:taskId/comments', getComments);

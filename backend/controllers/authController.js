@@ -4,7 +4,7 @@ const User = require('../models/User');
 
 // ─── Token generator helpers ──────────────────────────────────────────────────
 const signAccessToken = (id) =>
-  jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRE || '7d' });
+  jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRE || '1h' });
 
 const signRefreshToken = (id) =>
   jwt.sign({ id }, process.env.JWT_REFRESH_SECRET, {
@@ -40,7 +40,6 @@ exports.registerValidation = [
     .withMessage('Password must be at least 6 characters')
     .matches(/\d/)
     .withMessage('Password must contain at least one number'),
-  body('role').optional().isIn(['admin', 'member']).withMessage('Role must be admin or member'),
 ];
 
 exports.loginValidation = [
@@ -50,7 +49,7 @@ exports.loginValidation = [
 
 // ─── @route  POST /api/auth/register ─────────────────────────────────────────
 exports.register = async (req, res) => {
-  const { name, email, password, role } = req.body;
+  const { name, email, password } = req.body;
 
   // Check if user exists
   const existingUser = await User.findOne({ email });
@@ -58,7 +57,8 @@ exports.register = async (req, res) => {
     return res.status(409).json({ success: false, message: 'Email already registered.' });
   }
 
-  const user = await User.create({ name, email, password, role: role || 'member' });
+  // Self-registration is always a member; admin accounts are created via POST /api/users.
+  const user = await User.create({ name, email, password, role: 'member' });
   await sendTokenResponse(user, 201, res);
 };
 

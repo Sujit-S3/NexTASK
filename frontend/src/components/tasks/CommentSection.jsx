@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Send, Edit2, Trash2, Loader2, MessageCircle } from 'lucide-react';
 import { useSelector } from 'react-redux';
 import * as taskApi from '../../api/task.api';
@@ -17,7 +17,7 @@ export default function CommentSection({ taskId }) {
   const [editing,   setEditing]   = useState(null); // commentId
   const [editText,  setEditText]  = useState('');
   const [typingName,setTypingName]= useState('');
-  let typingTimer;
+  const typingTimer = useRef(null);
 
   useEffect(() => {
     loadComments();
@@ -81,10 +81,10 @@ export default function CommentSection({ taskId }) {
 
   const handleTyping = (val) => {
     setContent(val);
-    clearTimeout(typingTimer);
+    clearTimeout(typingTimer.current);
     if (val) {
       emitTyping?.(taskId, user?.name);
-      typingTimer = setTimeout(() => emitStopTyping?.(taskId), 1500);
+      typingTimer.current = setTimeout(() => emitStopTyping?.(taskId), 1500);
     } else {
       emitStopTyping?.(taskId);
     }

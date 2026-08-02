@@ -2,7 +2,7 @@ const { body } = require('express-validator');
 const Task = require('../models/Task');
 const User = require('../models/User');
 const Activity = require('../models/Activity');
-const { createAndEmitNotification, emitToAll, emitToAdmins, emitToUser, emitToTask } = require('../config/socket');
+const { createAndEmitNotification, emitToAdmins, emitToUser, emitToTask } = require('../config/socket');
 
 // ─── Validation rules ─────────────────────────────────────────────────────────
 exports.createTaskValidation = [
@@ -160,7 +160,7 @@ exports.createTask = async (req, res) => {
     targetTask: task._id,
     details: `Created task "${task.title}"`,
   });
-  if (io) emitToAll(io, 'activity:new', {});
+  if (io) emitToAdmins(io, 'activity:new', {});
 
   res.status(201).json({ success: true, data: task });
 };
@@ -259,7 +259,7 @@ exports.updateTask = async (req, res) => {
     targetTask: task._id,
     details: detailStr,
   });
-  if (io) emitToAll(io, 'activity:new', {});
+  if (io) emitToAdmins(io, 'activity:new', {});
 
   res.status(200).json({ success: true, data: task });
 };
@@ -294,7 +294,7 @@ exports.deleteTask = async (req, res) => {
     action: 'deleted',
     details: `Deleted task "${task.title}"`,
   });
-  if (io) emitToAll(io, 'activity:new', {});
+  if (io) emitToAdmins(io, 'activity:new', {});
 
   res.status(200).json({ success: true, message: 'Task deleted successfully.' });
 };
@@ -334,7 +334,7 @@ exports.assignTask = async (req, res) => {
     targetTask: task._id,
     details: `Assigned task "${task.title}" to ${user.name}`,
   });
-  if (io) emitToAll(io, 'activity:new', {});
+  if (io) emitToAdmins(io, 'activity:new', {});
 
   res.status(200).json({ success: true, data: task });
 };

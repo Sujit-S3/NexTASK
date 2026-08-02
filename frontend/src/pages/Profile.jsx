@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  User, Mail, Briefcase, Building2, Edit2, Save, X,
+  Mail, Briefcase, Edit2, Save,
   CheckSquare, Clock, TrendingUp, Loader2, Lock, Eye, EyeOff, ChevronDown,
 } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';

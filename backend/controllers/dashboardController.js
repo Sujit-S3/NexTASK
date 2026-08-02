@@ -9,6 +9,13 @@ exports.getAdminDashboard = async (req, res) => {
   const startOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
   const endOfLastMonth = new Date(now.getFullYear(), now.getMonth(), 0);
 
+  // Task completion trend for last 7 days
+  const last7Days = Array.from({ length: 7 }, (_, i) => {
+    const d = new Date();
+    d.setDate(d.getDate() - (6 - i));
+    return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  });
+
   const [
     totalTasks,
     completedTasks,
@@ -24,6 +31,7 @@ exports.getAdminDashboard = async (req, res) => {
     tasksByStatus,
     recentActivity,
     teamPerformance,
+    completionTrend,
   ] = await Promise.all([
     Task.countDocuments({ isArchived: false }),
     Task.countDocuments({ status: 'completed', isArchived: false }),
@@ -83,31 +91,25 @@ exports.getAdminDashboard = async (req, res) => {
         },
       },
     ]),
-  ]);
 
-  // Task completion trend for last 7 days
-  const last7Days = Array.from({ length: 7 }, (_, i) => {
-    const d = new Date();
-    d.setDate(d.getDate() - (6 - i));
-    return new Date(d.getFullYear(), d.getMonth(), d.getDate());
-  });
-
-  const completionTrend = await Task.aggregate([
-    {
-      $match: {
-        completedAt: { $gte: last7Days[0] },
-        status: 'completed',
-      },
-    },
-    {
-      $group: {
-        _id: {
-          $dateToString: { format: '%Y-%m-%d', date: '$completedAt' },
+    // Task completion trend for the last 7 days
+    Task.aggregate([
+      {
+        $match: {
+          completedAt: { $gte: last7Days[0] },
+          status: 'completed',
         },
-        count: { $sum: 1 },
       },
-    },
-    { $sort: { _id: 1 } },
+      {
+        $group: {
+          _id: {
+            $dateToString: { format: '%Y-%m-%d', date: '$completedAt' },
+          },
+          count: { $sum: 1 },
+        },
+      },
+      { $sort: { _id: 1 } },
+    ]),
   ]);
 
   const trendMap = new Map(completionTrend.map((d) => [d._id, d.count]));

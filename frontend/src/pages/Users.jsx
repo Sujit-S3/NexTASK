@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Plus, Search, Edit2, Trash2, ToggleLeft, ToggleRight,
-  Settings, Loader2, Users as UsersIcon, X,
+  Loader2, Users as UsersIcon, X,
 } from 'lucide-react';
 import { RoleBadge } from '../components/common/Badge';
 import Avatar from '../components/common/Avatar';

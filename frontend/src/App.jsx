@@ -1,3 +1,4 @@
+import { Suspense, lazy } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { useSelector } from 'react-redux';
@@ -10,16 +11,16 @@ import AuthLayout from './layouts/AuthLayout';
 import ProtectedRoute from './components/common/ProtectedRoute';
 import AIAssistantPanel from './components/common/AIAssistantPanel';
 
-import Landing    from './pages/Landing';
-import Login      from './pages/Login';
-import Register   from './pages/Register';
-import Dashboard  from './pages/Dashboard';
-import Tasks      from './pages/Tasks';
-import TaskDetail from './pages/TaskDetail';
-import CreateTask from './pages/CreateTask';
-import Users      from './pages/Users';
-import Profile    from './pages/Profile';
-import NotFound   from './pages/NotFound';
+const Landing    = lazy(() => import('./pages/Landing'));
+const Login      = lazy(() => import('./pages/Login'));
+const Register   = lazy(() => import('./pages/Register'));
+const Dashboard  = lazy(() => import('./pages/Dashboard'));
+const Tasks      = lazy(() => import('./pages/Tasks'));
+const TaskDetail = lazy(() => import('./pages/TaskDetail'));
+const CreateTask = lazy(() => import('./pages/CreateTask'));
+const Users      = lazy(() => import('./pages/Users'));
+const Profile    = lazy(() => import('./pages/Profile'));
+const NotFound   = lazy(() => import('./pages/NotFound'));
 
 export default function App() {
   const { isAuthenticated } = useSelector((s) => s.auth);
@@ -30,6 +31,7 @@ export default function App() {
         <BrowserRouter>
           <SocketProvider>
             <AIProvider>
+              <Suspense fallback={<div className="min-h-screen" />}>
               <Routes>
               {/* ── Landing ─────────────────────────────────────────────── */}
               <Route
@@ -68,6 +70,7 @@ export default function App() {
               {/* ── 404 ─────────────────────────────────────────────────── */}
               <Route path="*" element={<NotFound />} />
             </Routes>
+            </Suspense>
 
             <Toaster
               position="top-center"

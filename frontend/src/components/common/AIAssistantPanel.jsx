@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, X, Send, Loader2, Maximize2, Minimize2, CheckSquare, Calendar, Activity, RefreshCw } from 'lucide-react';
 import { useAI } from '../../context/AIContext';

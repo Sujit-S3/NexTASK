@@ -69,11 +69,6 @@ notificationSchema.pre('save', function (next) {
   next();
 });
 
-// ─── Static: get unread count for a user ─────────────────────────────────────
-notificationSchema.statics.getUnreadCount = function (userId) {
-  return this.countDocuments({ recipient: userId, isRead: false });
-};
-
 // ─── Compound index for fast user notification queries ────────────────────────
 notificationSchema.index({ recipient: 1, isRead: 1, createdAt: -1 });
 

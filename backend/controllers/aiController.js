@@ -137,15 +137,23 @@ exports.chat = async (req, res) => {
     res.setHeader('Cache-Control', 'no-cache');
     res.setHeader('Connection', 'keep-alive');
 
+    let clientDisconnected = false;
+    req.on('close', () => {
+      clientDisconnected = true;
+    });
+
     const result = await chat.sendMessageStream(message);
 
     for await (const chunk of result.stream) {
+      if (clientDisconnected) break;
       const chunkText = chunk.text();
       res.write(`data: ${JSON.stringify({ text: chunkText })}\n\n`);
     }
 
-    res.write('data: [DONE]\n\n');
-    res.end();
+    if (!clientDisconnected) {
+      res.write('data: [DONE]\n\n');
+      res.end();
+    }
 
   } catch (error) {
     console.error('Gemini API Streaming Error:', error);

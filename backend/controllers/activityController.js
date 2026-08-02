@@ -6,7 +6,8 @@ exports.getActivities = async (req, res) => {
     .sort({ createdAt: -1 })
     .limit(parseInt(limit))
     .populate('user', 'name avatar')
-    .populate('targetTask', 'title status priority');
+    .populate('targetTask', 'title status priority')
+    .lean();
 
   res.status(200).json({
     success: true,
