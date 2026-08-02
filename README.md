@@ -8,71 +8,247 @@
 ![Node.js](https://img.shields.io/badge/Node.js-18%2B-339933?logo=node.js&logoColor=white)
 ![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?logo=mongodb&logoColor=white)
 
-![NexTASK Banner](screenshots/dashboard.png)
+🚀 **Live Demo:** https://nextask-frontend-kappa.vercel.app
 
-**NexTASK** is a modern, intelligent task management platform designed to streamline team collaboration, boost productivity, and organize workflows with the power of an integrated AI Assistant. 
-
-### [Live Demo](https://nextask-frontend-kappa.vercel.app) | [GitHub Repository](https://github.com/Sujit-S3/NexTASK)
+📂 **Repository:** https://github.com/Sujit-S3/NexTASK
 
 ---
 
-## 🚀 Overview
+# Overview
 
-NexTASK goes beyond traditional to-do lists by offering a comprehensive suite of tools for teams and individuals. With real-time collaboration, intuitive Kanban boards, detailed analytics, and a built-in AI Assistant powered by Google's Gemini, NexTASK ensures your projects stay on track and your team stays aligned.
+NexTASK is an AI-powered full-stack task management and collaboration platform built using the MERN stack. It enables teams to create, assign, manage, and track tasks while providing real-time updates, analytics, notifications, and AI-assisted productivity features.
 
-## ✨ Features
-
-- **Intelligent AI Assistant:** Context-aware AI integrated directly into your workspace to help draft tasks, summarize activity, and brainstorm solutions.
-- **Task Management:** Organize tasks with Kanban boards, list views, and calendar integration.
-- **Real-Time Collaboration:** Live updates, comments, and online indicators to keep the team synced.
-- **Analytics Dashboard:** Visualize team performance, task completion rates, and productivity metrics.
-- **Role-Based Access Control:** Secure user management with Admin and Member roles.
-- **Responsive Design:** A beautiful, accessible UI that works seamlessly across desktop and mobile devices.
-- **Dark Mode Support:** Built-in theme toggling for comfortable viewing in any environment.
+Designed for modern teams, NexTASK combines intelligent task management, role-based collaboration, real-time communication, and AI-powered assistance into a single productivity workspace.
 
 ---
 
-## 📸 Screenshots
+# Project Highlights
 
-### Dashboard & Analytics
-![Analytics Dashboard](screenshots/analytics.png)
-
-### Task Management (Kanban)
-![Task Management](screenshots/tasks.png)
-
-### AI Assistant Integration
-![AI Assistant](screenshots/ai-assistant.png)
-
-### Team & User Management
-![Team Management](screenshots/team.png)
-
-### User Profile
-![User Profile](screenshots/profile.png)
+* Full-Stack MERN Application
+* Production Deployment on Vercel
+* Google Gemini AI Integration
+* Real-Time Collaboration with Socket.IO
+* JWT Authentication & Authorization
+* MongoDB Atlas Cloud Database
+* Analytics & Productivity Insights
+* Automated Backend Test Suite (Jest + Supertest, 48 passing tests)
+* Responsive Desktop & Mobile Experience
 
 ---
 
-## 🛠 Tech Stack
+# Features
 
-**Frontend:**
-- [React](https://reactjs.org/) (Vite)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [Redux Toolkit](https://redux-toolkit.js.org/)
-- Socket.io-client
+### Authentication & Security
 
-**Backend:**
-- [Node.js](https://nodejs.org/) & [Express](https://expressjs.com/)
-- [MongoDB](https://www.mongodb.com/) & Mongoose
-- Socket.io
-- Google Gemini API (AI Integration)
-- JWT Authentication
+* Secure JWT Authentication
+* Role-Based Access Control (Admin, Member)
+* Protected Routes
+* Persistent User Sessions
 
-**Testing:**
-- Jest & Supertest (backend API test suite, `backend/tests/`)
-- mongodb-memory-server (in-memory MongoDB, no external DB needed to run tests)
+### Task Management
+
+* Create Tasks
+* Edit Tasks
+* Delete Tasks
+* Assign Tasks to Team Members
+* Track Task Status
+* Priority Management
+* Due Date Tracking
+
+### Team Collaboration
+
+* Team Management
+* User Management
+* Real-Time Updates
+* Real-Time Notifications
+* Activity Tracking
+
+### AI Assistant
+
+* Google Gemini Powered Assistant
+* Task Breakdown Suggestions
+* Productivity Assistance
+* Context-Aware Responses
+
+### Analytics Dashboard
+
+* Task Analytics
+* Productivity Metrics
+* Team Performance Insights
+* Completion Statistics
+
+### User Experience
+
+* Responsive Design
+* Modern UI/UX
+* Dark Mode Support
+* Mobile Friendly Interface
 
 ---
 
-## ✅ Testing
+# Screenshots
+
+## Dashboard
+
+<img width="2885" height="1620" alt="Dashboard" src="https://github.com/user-attachments/assets/97da307c-0841-48fd-b5ac-f0ad8e5b4944" />
+
+## Analytics Dashboard
+
+<img width="2880" height="1605" alt="Analytics" src="https://github.com/user-attachments/assets/051db55b-3f39-4eb1-acf2-9cf93df8bf43" />
+
+## Task Management
+
+<img width="2880" height="1605" alt="Task Management" src="https://github.com/user-attachments/assets/880a079e-0455-46b0-8e9d-05823c407a3d" />
+
+## AI Assistant
+
+<img width="2880" height="1605" alt="AI Assistant" src="https://github.com/user-attachments/assets/168ff418-8eab-48a2-8969-17a0f8ec652f" />
+
+## Team Management
+
+<img width="2880" height="1605" alt="Team Management" src="https://github.com/user-attachments/assets/746cfafb-7edd-43e3-a757-372967a1bc13" />
+
+## User Profile
+
+<img width="2880" height="1605" alt="Profile" src="https://github.com/user-attachments/assets/f8a4bcd5-0ee2-4089-9425-995e6a8cee18" />
+
+---
+
+# Architecture
+
+```text
+Frontend (React + Vite)
+          │
+          ▼
+REST APIs + Socket.IO
+          │
+          ▼
+Backend (Node.js + Express)
+          │
+          ▼
+MongoDB Atlas
+
+AI Assistant
+      │
+      ▼
+Google Gemini API
+```
+
+---
+
+# Tech Stack
+
+## Frontend
+
+* React
+* Vite
+* Tailwind CSS
+* Redux Toolkit
+* Socket.IO Client
+
+## Backend
+
+* Node.js
+* Express.js
+* Socket.IO
+
+## Database
+
+* MongoDB Atlas
+* Mongoose
+
+## Authentication
+
+* JWT Authentication
+* Role-Based Access Control
+
+## AI Integration
+
+* Google Gemini API
+
+## Testing
+
+* Jest & Supertest (backend API test suite, `backend/tests/`)
+* mongodb-memory-server (in-memory MongoDB, no external DB needed to run tests)
+
+---
+
+# Installation
+
+## Clone Repository
+
+```bash
+git clone https://github.com/Sujit-S3/NexTASK.git
+cd NexTASK
+```
+
+## Install Backend Dependencies
+
+```bash
+cd backend
+npm install
+```
+
+## Install Frontend Dependencies
+
+```bash
+cd ../frontend
+npm install
+```
+
+## Environment Variables
+
+### Backend (`backend/.env`)
+
+```env
+NODE_ENV=development
+PORT=5000
+
+MONGODB_URI=your_mongodb_connection_string
+
+JWT_SECRET=your_jwt_secret_key
+JWT_EXPIRE=1h
+JWT_REFRESH_SECRET=your_jwt_refresh_secret_key
+JWT_REFRESH_EXPIRE=30d
+
+CLIENT_URL=http://localhost:5173
+
+RATE_LIMIT_WINDOW_MS=900000
+RATE_LIMIT_MAX=100
+
+GEMINI_API_KEY=your_google_gemini_api_key
+```
+
+### Frontend (`frontend/.env`)
+
+```env
+VITE_API_URL=http://localhost:5000/api
+VITE_SOCKET_URL=http://localhost:5000
+```
+
+## Run Backend
+
+```bash
+cd backend
+npm start
+```
+
+## Run Frontend
+
+```bash
+cd frontend
+npm run dev
+```
+
+Open:
+
+```text
+http://localhost:5173
+```
+
+---
+
+# Testing
 
 The backend has an automated Jest + Supertest suite covering authentication, task CRUD and role permissions, user management, and error handling. It runs against an in-memory MongoDB instance, so no database setup is required.
 
@@ -83,79 +259,42 @@ npm test
 
 ---
 
-## ⚙️ Installation
+# Key Capabilities
 
-To run NexTASK locally, follow these steps:
-
-### Prerequisites
-- Node.js (v16+)
-- MongoDB (Local or Atlas)
-
-### 1. Clone the repository
-```bash
-git clone https://github.com/Sujit-S3/NexTASK.git
-cd NexTASK
-```
-
-### 2. Install dependencies
-Install dependencies for both the frontend and backend.
-
-```bash
-# Install backend dependencies
-cd backend
-npm install
-
-# Install frontend dependencies
-cd ../frontend
-npm install
-```
-
-### 3. Set up Environment Variables
-Create a `.env` file in both the `backend` and `frontend` directories based on their respective `.env.example` files. See the [Environment Variables](#-environment-variables) section below for details.
-
-### 4. Run the Application
-You can use the provided `start.bat` script (on Windows) or run the servers manually.
-
-```bash
-# In the backend directory
-npm start
-
-# In the frontend directory
-npm run dev
-```
-
-Navigate to `http://localhost:5173` to view the application.
+* Secure Authentication & Authorization
+* Real-Time Team Collaboration
+* AI-Powered Productivity Assistance
+* Analytics & Performance Tracking
+* Scalable MERN Architecture
+* Cloud Database Integration
+* Production Deployment
+* Modern Responsive Design
 
 ---
 
-## 🔐 Environment Variables
+# Live Demo
 
-### Backend (`backend/.env`)
-```env
-NODE_ENV=development
-PORT=5000
-MONGODB_URI=your_mongodb_connection_string
-JWT_SECRET=your_jwt_secret_key
-JWT_EXPIRE=1h
-JWT_REFRESH_SECRET=your_jwt_refresh_secret_key
-JWT_REFRESH_EXPIRE=30d
-CLIENT_URL=http://localhost:5173
-RATE_LIMIT_WINDOW_MS=900000
-RATE_LIMIT_MAX=100
-GEMINI_API_KEY=your_google_gemini_api_key
-```
-
-### Frontend (`frontend/.env`)
-```env
-VITE_API_URL=http://localhost:5000/api
-VITE_SOCKET_URL=http://localhost:5000
-```
+https://nextask-frontend-kappa.vercel.app
 
 ---
 
-## 📜 License
+# License
 
-This project is licensed under the MIT License.
+This project is licensed under the [MIT License](LICENSE).
 
 ---
-*Prepared for portfolio presentation and recruiter review.*
+
+# Author
+
+### Surya Sujit
+
+* GitHub: https://github.com/Sujit-S3
+* LinkedIn: https://linkedin.com/in/surya-sujit-s-400361381
+
+---
+
+# Release
+
+**Version:** v1.0.0
+
+Production release of NexTASK featuring AI-powered task management, real-time collaboration, an analytics dashboard, role-based access control enforced consistently across frontend and backend, JWT authentication, MongoDB Atlas integration, Google Gemini AI assistance, and an automated backend test suite. See [CHANGELOG.md](CHANGELOG.md) for the full list of changes and known limitations.
