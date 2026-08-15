@@ -74,7 +74,16 @@ if (process.env.NODE_ENV === 'development') {
   app.use(morgan('combined'));
 }
 
-// ── Health check ──────────────────────────────────────────────────────────────
+// ── Root & Health check ────────────────────────────────────────────────────────
+app.get('/', (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'NexTASK API Server is running',
+    environment: process.env.NODE_ENV,
+    timestamp: new Date().toISOString(),
+  });
+});
+
 app.get('/health', (req, res) => {
   res.status(200).json({
     success: true,
