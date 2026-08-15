@@ -47,6 +47,7 @@ const taskSlice = createSlice({
     loading:       false,
     taskLoading:   false,
     error:         null,
+    currentFetchRequestId: null,
   },
   reducers: {
     setFilter: (state, action) => {
@@ -76,14 +77,25 @@ const taskSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // fetchTasks
-      .addCase(fetchTasks.pending,   (s) => { s.loading = true; s.error = null; })
+      // fetchTasks — guarded by requestId so an older, slower request that
+      // resolves after a newer one can't clobber the newer request's results
+      // (e.g. rapid filter/page changes resolving out of order).
+      .addCase(fetchTasks.pending,   (s, a) => {
+        s.loading = true;
+        s.error = null;
+        s.currentFetchRequestId = a.meta.requestId;
+      })
       .addCase(fetchTasks.fulfilled, (s, a) => {
+        if (a.meta.requestId !== s.currentFetchRequestId) return;
         s.loading = false;
         s.tasks = a.payload.data;
         s.pagination = a.payload.pagination;
       })
-      .addCase(fetchTasks.rejected,  (s, a) => { s.loading = false; s.error = a.payload; })
+      .addCase(fetchTasks.rejected,  (s, a) => {
+        if (a.meta.requestId !== s.currentFetchRequestId) return;
+        s.loading = false;
+        s.error = a.payload;
+      })
 
       // fetchTaskById
       .addCase(fetchTaskById.pending,   (s) => { s.taskLoading = true; s.task = null; })

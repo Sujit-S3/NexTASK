@@ -1,6 +1,7 @@
 const { body } = require('express-validator');
 const User = require('../models/User');
 const Task = require('../models/Task');
+const { getPagination } = require('../utils/pagination');
 
 // ─── Validation rules ─────────────────────────────────────────────────────────
 exports.createUserValidation = [
@@ -21,7 +22,8 @@ exports.updateUserValidation = [
 
 // ─── @route  GET /api/users ───────────────────────────────────────────────────
 exports.getUsers = async (req, res) => {
-  const { search, role, isActive, page = 1, limit = 20, sort = '-createdAt' } = req.query;
+  const { search, role, isActive, sort = '-createdAt' } = req.query;
+  const { page, limit, skip } = getPagination(req.query);
 
   const filter = {};
   if (search) filter.$or = [
@@ -31,9 +33,8 @@ exports.getUsers = async (req, res) => {
   if (role) filter.role = role;
   if (isActive !== undefined) filter.isActive = isActive === 'true';
 
-  const skip = (Number(page) - 1) * Number(limit);
   const [users, total] = await Promise.all([
-    User.find(filter).sort(sort).skip(skip).limit(Number(limit)).lean(),
+    User.find(filter).sort(sort).skip(skip).limit(limit).lean(),
     User.countDocuments(filter),
   ]);
 
@@ -42,9 +43,9 @@ exports.getUsers = async (req, res) => {
     data: users,
     pagination: {
       total,
-      page: Number(page),
-      pages: Math.ceil(total / Number(limit)),
-      limit: Number(limit),
+      page,
+      pages: Math.ceil(total / limit),
+      limit,
     },
   });
 };
@@ -133,11 +134,14 @@ exports.deleteUser = async (req, res) => {
 
 // ─── @route  PATCH /api/users/:id/toggle-status (admin only) ─────────────────
 exports.toggleUserStatus = async (req, res) => {
-  const user = await User.findById(req.params.id);
+  // Atomic flip via an aggregation-pipeline update — avoids a read-then-write
+  // race where two concurrent toggles could net out to the wrong state.
+  const user = await User.findByIdAndUpdate(
+    req.params.id,
+    [{ $set: { isActive: { $not: '$isActive' } } }],
+    { new: true }
+  );
   if (!user) return res.status(404).json({ success: false, message: 'User not found.' });
-
-  user.isActive = !user.isActive;
-  await user.save();
 
   res.status(200).json({
     success: true,

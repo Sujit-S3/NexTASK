@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const Task = require('../models/Task');
 const Notification = require('../models/Notification');
 
 // Track online users: Map<userId, socketId>
@@ -39,8 +40,21 @@ const initSocket = (io) => {
     console.log(`👤 User ${socket.userId} joined. Online: ${onlineUsers.size}`);
 
     // ─── Task events (emitted by controllers, forwarded here) ────────────
-    socket.on('task:join', (taskId) => {
-      socket.join(`task:${taskId}`);
+    // Mirror the REST-layer rule (taskController/commentController): a member
+    // may only join the room for a task assigned to them; admins can join any.
+    socket.on('task:join', async (taskId) => {
+      try {
+        if (socket.userRole === 'admin') {
+          socket.join(`task:${taskId}`);
+          return;
+        }
+        const task = await Task.findById(taskId).select('assignedTo').lean();
+        if (task && task.assignedTo?.toString() === socket.userId) {
+          socket.join(`task:${taskId}`);
+        }
+      } catch {
+        // Invalid taskId or lookup failure — simply don't join the room.
+      }
     });
 
     socket.on('task:leave', (taskId) => {

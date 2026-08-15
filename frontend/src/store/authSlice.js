@@ -106,7 +106,14 @@ const authSlice = createSlice({
     // Fetch me
     builder
       .addCase(fetchMe.fulfilled, (s, a) => { s.user = a.payload; s.isAuthenticated = true; })
-      .addCase(fetchMe.rejected,  (s) => { s.user = null; s.token = null; s.isAuthenticated = false; });
+      .addCase(fetchMe.rejected,  (s) => {
+        s.user = null; s.token = null; s.isAuthenticated = false;
+        // Without this, a dead/expired session's stale user+token stay in
+        // localStorage and get re-read as "authenticated" on the next reload.
+        localStorage.removeItem('tf_user');
+        localStorage.removeItem('tf_token');
+        localStorage.removeItem('tf_refresh');
+      });
 
     // Update profile
     builder.addCase(updateMyProfile.fulfilled, (s, a) => { s.user = a.payload; });

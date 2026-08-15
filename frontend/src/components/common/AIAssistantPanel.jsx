@@ -176,13 +176,14 @@ export default function AIAssistantPanel() {
             </div>
           </div>
           <div className="flex items-center gap-1">
-            <button 
+            <button
               onClick={() => {
                 setMessages(initialMessages);
                 setInput('');
-              }} 
+              }}
+              disabled={loading}
               title="Refresh Chat"
-              className="p-1.5 rounded-lg hover:bg-white/10 text-slate-400 hover:text-slate-200 transition-colors"
+              className="p-1.5 rounded-lg hover:bg-white/10 text-slate-400 hover:text-slate-200 transition-colors disabled:opacity-40 disabled:pointer-events-none"
             >
               <RefreshCw size={14} />
             </button>
@@ -235,7 +236,8 @@ export default function AIAssistantPanel() {
               <button
                 key={i}
                 onClick={() => handleSend(action.prompt)}
-                className="flex items-center gap-1.5 shrink-0 px-3 py-1.5 rounded-full bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/20 text-indigo-300 text-xs font-medium transition-colors"
+                disabled={loading}
+                className="flex items-center gap-1.5 shrink-0 px-3 py-1.5 rounded-full bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/20 text-indigo-300 text-xs font-medium transition-colors disabled:opacity-40 disabled:pointer-events-none"
               >
                 <action.icon size={12} />
                 {action.label}

@@ -22,7 +22,7 @@ export default function Tasks() {
   const { user }      = useSelector((s) => s.auth);
   const isAdmin       = user?.role === 'admin';
 
-  const { tasks, loading, filters, pagination, setFilter, clearFilters, updateTask, deleteTask } = useTasks();
+  const { tasks, loading, filters, pagination, setFilter, setPage, clearFilters, updateTask, deleteTask } = useTasks();
 
   const [view,        setView]        = useState('list');
   const [search,      setSearch]      = useState(searchParams.get('search') || '');
@@ -200,7 +200,7 @@ export default function Tasks() {
           {Array.from({ length: pagination.pages }, (_, i) => i + 1).map((p) => (
             <motion.button
               key={p}
-              onClick={() => setFilter({ page: p })}
+              onClick={() => setPage(p)}
               className="w-9 h-9 rounded-xl text-sm font-medium transition-all"
               style={{
                 background: filters.page === p ? 'var(--c-accent)' : 'var(--c-surface)',

@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useRef } from 'react';
+import { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { io } from 'socket.io-client';
 import { useDispatch, useSelector } from 'react-redux';
 import { socketTaskCreated, socketTaskUpdated, socketTaskDeleted } from '../store/taskSlice';
@@ -9,6 +9,7 @@ const SocketContext = createContext(null);
 
 export const SocketProvider = ({ children }) => {
   const socketRef = useRef(null);
+  const [socketReady, setSocketReady] = useState(false);
   const dispatch  = useDispatch();
   const { user, isAuthenticated } = useSelector((s) => s.auth);
 
@@ -20,12 +21,17 @@ export const SocketProvider = ({ children }) => {
     const socket = io(SOCKET_URL, {
       transports: ['websocket', 'polling'],
       withCredentials: true,
-      auth: { token: localStorage.getItem('tf_token') },
+      // A callback (not a plain object) so the token is re-read from
+      // localStorage on every reconnection attempt, not just the first
+      // connect — otherwise a socket that outlives a token refresh
+      // reconnects with a stale token and can fail re-authentication.
+      auth: (cb) => cb({ token: localStorage.getItem('tf_token') }),
       reconnectionDelay: 1000,
       reconnectionAttempts: 5,
     });
 
     socketRef.current = socket;
+    setSocketReady(true);
 
     socket.on('connect', () => {
       console.log('🔌 Socket connected:', socket.id);
@@ -55,6 +61,7 @@ export const SocketProvider = ({ children }) => {
       socket.off('users:online');
       socket.disconnect();
       socketRef.current = null;
+      setSocketReady(false);
     };
   }, [isAuthenticated, user?._id]);
 
@@ -64,7 +71,7 @@ export const SocketProvider = ({ children }) => {
   const emitStopTyping= (taskId)           => socketRef.current?.emit('comment:stop-typing', { taskId });
 
   return (
-    <SocketContext.Provider value={{ socket: socketRef.current, joinTaskRoom, leaveTaskRoom, emitTyping, emitStopTyping }}>
+    <SocketContext.Provider value={{ socket: socketRef.current, socketReady, joinTaskRoom, leaveTaskRoom, emitTyping, emitStopTyping }}>
       {children}
     </SocketContext.Provider>
   );

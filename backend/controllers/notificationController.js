@@ -1,13 +1,13 @@
 const Notification = require('../models/Notification');
+const { getPagination } = require('../utils/pagination');
 
 // ─── @route  GET /api/notifications ──────────────────────────────────────────
 exports.getNotifications = async (req, res) => {
-  const { page = 1, limit = 20, isRead } = req.query;
+  const { isRead } = req.query;
+  const { page, limit, skip } = getPagination(req.query);
 
   const filter = { recipient: req.user._id };
   if (isRead !== undefined) filter.isRead = isRead === 'true';
-
-  const skip = (Number(page) - 1) * Number(limit);
 
   const [notifications, total, unreadCount] = await Promise.all([
     Notification.find(filter)
@@ -15,7 +15,7 @@ exports.getNotifications = async (req, res) => {
       .populate('task', 'title status')
       .sort('-createdAt')
       .skip(skip)
-      .limit(Number(limit))
+      .limit(limit)
       .lean(),
     Notification.countDocuments(filter),
     Notification.countDocuments({ recipient: req.user._id, isRead: false }),
@@ -27,9 +27,9 @@ exports.getNotifications = async (req, res) => {
     unreadCount,
     pagination: {
       total,
-      page: Number(page),
-      pages: Math.ceil(total / Number(limit)),
-      limit: Number(limit),
+      page,
+      pages: Math.ceil(total / limit),
+      limit,
     },
   });
 };

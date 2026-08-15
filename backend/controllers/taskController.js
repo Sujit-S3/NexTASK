@@ -3,6 +3,7 @@ const Task = require('../models/Task');
 const User = require('../models/User');
 const Activity = require('../models/Activity');
 const { createAndEmitNotification, emitToAdmins, emitToUser, emitToTask } = require('../config/socket');
+const { getPagination } = require('../utils/pagination');
 
 // ─── Validation rules ─────────────────────────────────────────────────────────
 exports.createTaskValidation = [
@@ -34,10 +35,9 @@ exports.getTasks = async (req, res) => {
     dueBefore,
     dueAfter,
     isArchived = false,
-    page = 1,
-    limit = 20,
     sort = '-createdAt',
   } = req.query;
+  const { page, limit, skip } = getPagination(req.query);
 
   const filter = { isArchived: isArchived === 'true' };
 
@@ -61,14 +61,13 @@ exports.getTasks = async (req, res) => {
     filter.$text = { $search: search };
   }
 
-  const skip = (Number(page) - 1) * Number(limit);
   const [tasks, total] = await Promise.all([
     Task.find(filter)
       .populate('assignedTo', 'name email avatar role')
       .populate('createdBy', 'name email avatar')
       .sort(sort)
       .skip(skip)
-      .limit(Number(limit))
+      .limit(limit)
       .lean({ virtuals: true }),
     Task.countDocuments(filter),
   ]);
@@ -78,9 +77,9 @@ exports.getTasks = async (req, res) => {
     data: tasks,
     pagination: {
       total,
-      page: Number(page),
-      pages: Math.ceil(total / Number(limit)),
-      limit: Number(limit),
+      page,
+      pages: Math.ceil(total / limit),
+      limit,
     },
   });
 };

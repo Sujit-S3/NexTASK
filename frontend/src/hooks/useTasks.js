@@ -12,10 +12,13 @@ export default function useTasks(autoFetch = true) {
 
   return {
     tasks, task, stats, pagination, filters, loading, taskLoading, error,
-    fetchTasks:   (params) => dispatch(fetchTasks(params)),
-    createTask:   (data)   => dispatch(createTask(data)),
-    updateTask:   (id, data) => dispatch(updateTask({ id, data })),
-    deleteTask:   (id)     => dispatch(deleteTask(id)),
+    // .unwrap() makes these reject on failure — without it, dispatching a
+    // createAsyncThunk always resolves (fulfilled or rejected), so every
+    // try/catch around a caller of these functions would silently never catch.
+    fetchTasks:   (params) => dispatch(fetchTasks(params)).unwrap(),
+    createTask:   (data)   => dispatch(createTask(data)).unwrap(),
+    updateTask:   (id, data) => dispatch(updateTask({ id, data })).unwrap(),
+    deleteTask:   (id)     => dispatch(deleteTask(id)).unwrap(),
     setFilter:    (f)      => dispatch(setFilter(f)),
     clearFilters: ()       => dispatch(clearFilters()),
     setPage:      (p)      => dispatch(setPage(p)),

@@ -9,11 +9,13 @@ exports.getAdminDashboard = async (req, res) => {
   const startOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
   const endOfLastMonth = new Date(now.getFullYear(), now.getMonth(), 0);
 
-  // Task completion trend for last 7 days
+  // Task completion trend for last 7 days. Built in UTC to match $dateToString's
+  // default UTC formatting below — using local-timezone day boundaries here would
+  // shift the bucketing on any server not running in UTC.
   const last7Days = Array.from({ length: 7 }, (_, i) => {
     const d = new Date();
-    d.setDate(d.getDate() - (6 - i));
-    return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+    d.setUTCDate(d.getUTCDate() - (6 - i));
+    return new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()));
   });
 
   const [
@@ -122,7 +124,9 @@ exports.getAdminDashboard = async (req, res) => {
   const taskGrowth =
     tasksLastMonth > 0
       ? Math.round(((tasksThisMonth - tasksLastMonth) / tasksLastMonth) * 100)
-      : 100;
+      : tasksThisMonth > 0
+        ? 100
+        : 0;
 
   res.status(200).json({
     success: true,

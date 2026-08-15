@@ -1,7 +1,8 @@
-import { Suspense, lazy } from 'react';
+import { Suspense, lazy, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchMe } from './store/authSlice';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { SocketProvider } from './contexts/SocketContext';
 import { AIProvider } from './context/AIContext';
@@ -23,7 +24,17 @@ const Profile    = lazy(() => import('./pages/Profile'));
 const NotFound   = lazy(() => import('./pages/NotFound'));
 
 export default function App() {
+  const dispatch = useDispatch();
   const { isAuthenticated } = useSelector((s) => s.auth);
+
+  // Revalidate a persisted session against the server once on load — without
+  // this, a token that was revoked/expired server-side (or belongs to a
+  // deactivated user) still renders protected content, including admin-only
+  // routes, purely off the stale cached user in localStorage.
+  useEffect(() => {
+    if (isAuthenticated) dispatch(fetchMe());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <ThemeProvider>

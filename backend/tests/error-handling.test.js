@@ -44,4 +44,21 @@ describe('error handling', () => {
     expect(res.status).toBe(200);
     expect(res.body.success).toBe(true);
   });
+
+  it('does not 500 on page=0 and does not return unbounded results for limit=0', async () => {
+    const { token } = await registerAdmin();
+
+    const zeroPage = await request(app)
+      .get('/api/tasks?page=0')
+      .set('Authorization', `Bearer ${token}`);
+    expect(zeroPage.status).toBe(200);
+    expect(zeroPage.body.pagination.page).toBe(1);
+
+    const zeroLimit = await request(app)
+      .get('/api/tasks?limit=0')
+      .set('Authorization', `Bearer ${token}`);
+    expect(zeroLimit.status).toBe(200);
+    expect(zeroLimit.body.pagination.limit).toBeGreaterThan(0);
+    expect(Number.isFinite(zeroLimit.body.pagination.pages)).toBe(true);
+  });
 });

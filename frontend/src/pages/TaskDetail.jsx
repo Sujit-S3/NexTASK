@@ -39,7 +39,7 @@ export default function TaskDetail() {
   const { id }    = useParams();
   const dispatch  = useDispatch();
   const navigate  = useNavigate();
-  const { joinTaskRoom, leaveTaskRoom } = useSocket() || {};
+  const { joinTaskRoom, leaveTaskRoom, socketReady } = useSocket() || {};
   const { user }  = useSelector((s) => s.auth);
   const { task, taskLoading } = useSelector((s) => s.tasks);
   const isAdmin   = user?.role === 'admin';
@@ -53,9 +53,17 @@ export default function TaskDetail() {
 
   useEffect(() => {
     dispatch(fetchTaskById(id));
+  }, [id]);
+
+  // Separate from the data fetch above and keyed on socketReady too: on a
+  // direct load/refresh of this page, SocketProvider's connection effect
+  // hasn't necessarily run yet when this effect first fires, so joining
+  // would silently no-op without a retry once the socket comes up.
+  useEffect(() => {
+    if (!socketReady) return;
     joinTaskRoom?.(id);
     return () => leaveTaskRoom?.(id);
-  }, [id]);
+  }, [id, socketReady]);
 
   useEffect(() => {
     if (isAdmin) getUsers({ limit: 100 }).then((r) => setUsers(r.data || [])).catch(() => {});
@@ -64,7 +72,7 @@ export default function TaskDetail() {
   const handleStatusChange = async (newStatus) => {
     setStatusLoading(true);
     try {
-      await dispatch(updateTask({ id, data: { status: newStatus } }));
+      await dispatch(updateTask({ id, data: { status: newStatus } })).unwrap();
       toast.success('Status updated!');
     } catch { toast.error('Failed to update status'); }
     finally { setStatusLoading(false); }
@@ -73,7 +81,7 @@ export default function TaskDetail() {
   const handleEditSubmit = async (data) => {
     setEditLoading(true);
     try {
-      await dispatch(updateTask({ id, data }));
+      await dispatch(updateTask({ id, data })).unwrap();
       toast.success('Task updated!');
       setEditOpen(false);
     } catch { toast.error('Failed to update task'); }
@@ -83,7 +91,7 @@ export default function TaskDetail() {
   const handleDelete = async () => {
     setDeleteLoading(true);
     try {
-      await dispatch(deleteTask(id));
+      await dispatch(deleteTask(id)).unwrap();
       toast.success('Task deleted');
       navigate('/tasks');
     } catch { toast.error('Failed to delete task'); }

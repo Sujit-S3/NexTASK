@@ -2,6 +2,7 @@ const { body } = require('express-validator');
 const Comment = require('../models/Comment');
 const Task = require('../models/Task');
 const { createAndEmitNotification, emitToTask } = require('../config/socket');
+const { getPagination } = require('../utils/pagination');
 
 // ─── Validation ───────────────────────────────────────────────────────────────
 exports.commentValidation = [
@@ -16,7 +17,7 @@ exports.commentValidation = [
 // ─── @route  GET /api/tasks/:taskId/comments ──────────────────────────────────
 exports.getComments = async (req, res) => {
   const { taskId } = req.params;
-  const { page = 1, limit = 50 } = req.query;
+  const { page, limit, skip } = getPagination(req.query, 50);
 
   const task = await Task.findById(taskId);
   if (!task) return res.status(404).json({ success: false, message: 'Task not found.' });
@@ -29,13 +30,12 @@ exports.getComments = async (req, res) => {
     return res.status(403).json({ success: false, message: 'Access denied.' });
   }
 
-  const skip = (Number(page) - 1) * Number(limit);
   const [comments, total] = await Promise.all([
     Comment.find({ task: taskId })
       .populate('author', 'name email avatar role')
       .sort('createdAt')
       .skip(skip)
-      .limit(Number(limit))
+      .limit(limit)
       .lean(),
     Comment.countDocuments({ task: taskId }),
   ]);
@@ -45,8 +45,9 @@ exports.getComments = async (req, res) => {
     data: comments,
     pagination: {
       total,
-      page: Number(page),
-      pages: Math.ceil(total / Number(limit)),
+      page,
+      pages: Math.ceil(total / limit),
+      limit,
     },
   });
 };

@@ -54,6 +54,10 @@ export default function TaskForm({ onSubmit, initialData, loading, users = [], i
       tags:        form.tags ? form.tags.split(',').map((t) => t.trim()).filter(Boolean) : [],
     };
     if (form.assignedTo) payload.assignedTo = form.assignedTo;
+    // Editing an existing task and clearing the assignee must send an explicit
+    // null — omitting the key entirely leaves the previous assignee untouched
+    // (updateTask only writes fields that are present in the request body).
+    else if (initialData) payload.assignedTo = null;
 
     onSubmit(payload);
   };

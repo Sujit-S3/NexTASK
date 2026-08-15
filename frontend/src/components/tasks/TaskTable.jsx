@@ -7,6 +7,10 @@ import Avatar from '../common/Avatar';
 import { formatDate, isOverdue } from '../../utils/formatters';
 import { TableRowSkeleton } from '../common/LoadingSkeleton';
 import EmptyState from '../common/EmptyState';
+import { PRIORITIES, STATUSES } from '../../utils/constants';
+
+const PRIORITY_RANK = Object.fromEntries(PRIORITIES.map((p, i) => [p.value, i]));
+const STATUS_RANK   = Object.fromEntries(STATUSES.map((s, i) => [s.value, i]));
 
 export default function TaskTable({ tasks, loading, onEdit, onDelete, isAdmin }) {
   const navigate = useNavigate();
@@ -28,6 +32,10 @@ export default function TaskTable({ tasks, loading, onEdit, onDelete, isAdmin })
   const sortedTasks = [...tasks].sort((a, b) => {
     let av = a[sortField], bv = b[sortField];
     if (sortField === 'assignedTo') { av = a.assignedTo?.name || ''; bv = b.assignedTo?.name || ''; }
+    // Priority/status are workflow-ordered (low→critical, todo→completed),
+    // not alphabetical — sort by that rank instead of the raw string value.
+    else if (sortField === 'priority') { av = PRIORITY_RANK[av] ?? -1; bv = PRIORITY_RANK[bv] ?? -1; }
+    else if (sortField === 'status')   { av = STATUS_RANK[av]   ?? -1; bv = STATUS_RANK[bv]   ?? -1; }
     if (av < bv) return sortDir === 'asc' ? -1 : 1;
     if (av > bv) return sortDir === 'asc' ?  1 : -1;
     return 0;
