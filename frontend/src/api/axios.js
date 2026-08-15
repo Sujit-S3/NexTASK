@@ -30,13 +30,21 @@ api.interceptors.response.use(
   async (error) => {
     const original = error.config;
 
-    if (error.response?.status === 401 && !original._retry) {
+    // Do NOT trigger refresh token logic or page reloads for auth endpoints
+    const isAuthEndpoint =
+      original?.url?.includes('/auth/login') ||
+      original?.url?.includes('/auth/register') ||
+      original?.url?.includes('/auth/refresh-token');
+
+    if (error.response?.status === 401 && !original._retry && !isAuthEndpoint) {
       const refreshToken = localStorage.getItem('tf_refresh');
 
       if (!refreshToken) {
         localStorage.removeItem('tf_token');
         localStorage.removeItem('tf_user');
-        window.location.href = '/login';
+        if (!window.location.pathname.startsWith('/login') && !window.location.pathname.startsWith('/register')) {
+          window.location.href = '/login';
+        }
         return Promise.reject(error);
       }
 
@@ -72,7 +80,9 @@ api.interceptors.response.use(
         localStorage.removeItem('tf_refresh');
         // Dispatch custom event for graceful Redux logout
         window.dispatchEvent(new Event('auth:logout'));
-        window.location.href = '/login';
+        if (!window.location.pathname.startsWith('/login') && !window.location.pathname.startsWith('/register')) {
+          window.location.href = '/login';
+        }
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;

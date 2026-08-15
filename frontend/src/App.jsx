@@ -33,6 +33,12 @@ export default function App() {
   // routes, purely off the stale cached user in localStorage.
   useEffect(() => {
     if (isAuthenticated) dispatch(fetchMe());
+
+    const handleAuthLogout = () => {
+      dispatch(fetchMe());
+    };
+    window.addEventListener('auth:logout', handleAuthLogout);
+    return () => window.removeEventListener('auth:logout', handleAuthLogout);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

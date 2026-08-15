@@ -14,7 +14,8 @@ export const loginUser = createAsyncThunk('auth/login', async (credentials, { re
     if (data.refreshToken) localStorage.setItem('tf_refresh', data.refreshToken);
     return data;
   } catch (err) {
-    return rejectWithValue(err.response?.data?.message || 'Login failed');
+    const errorMsg = err.response?.data?.errors?.[0]?.message || err.response?.data?.message || 'Login failed';
+    return rejectWithValue(errorMsg);
   }
 });
 
@@ -26,7 +27,8 @@ export const registerUser = createAsyncThunk('auth/register', async (userData, {
     if (data.refreshToken) localStorage.setItem('tf_refresh', data.refreshToken);
     return data;
   } catch (err) {
-    return rejectWithValue(err.response?.data?.message || 'Registration failed');
+    const errorMsg = err.response?.data?.errors?.[0]?.message || err.response?.data?.message || 'Registration failed';
+    return rejectWithValue(errorMsg);
   }
 });
 
