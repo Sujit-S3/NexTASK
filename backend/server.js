@@ -44,6 +44,9 @@ const startServer = async () => {
   }
 
   await connectDB();
+  const { ensureAdminUser } = require('./createAdmin');
+  await ensureAdminUser();
+
   httpServer.listen(PORT, () => {
     console.log(`\n🚀 NexTASK API running in ${process.env.NODE_ENV} mode`);
     console.log(`📡 Server: http://localhost:${PORT}`);

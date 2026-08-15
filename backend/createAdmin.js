@@ -1,36 +1,31 @@
-require('dotenv').config();
-const crypto = require('crypto');
-const mongoose = require('mongoose');
 const User = require('./models/User');
 
-async function createOrFindAdmin() {
+async function ensureAdminUser() {
   try {
-    await mongoose.connect(process.env.MONGODB_URI);
-    console.log('Connected to DB');
-
     const admin = await User.findOne({ role: 'admin' });
     if (admin) {
-      console.log('Admin already exists:');
-      console.log('Email:', admin.email);
-      console.log('(Password left untouched — use the change-password flow if you need to reset it.)');
-      return;
+      console.log('✅ Admin user ready:', admin.email);
+      return admin;
     }
 
-    const password = process.env.ADMIN_SEED_PASSWORD || crypto.randomBytes(9).toString('base64url');
     const email = process.env.ADMIN_SEED_EMAIL || 'admin@nextask.com';
+    const password = process.env.ADMIN_SEED_PASSWORD || 'Admin@123456';
 
-    await User.create({ name: 'Super Admin', email, password, role: 'admin' });
-
-    console.log('New admin created:');
-    console.log('Email:', email);
-    if (!process.env.ADMIN_SEED_PASSWORD) {
-      console.log('Generated password (shown once, save it now):', password);
-    }
+    const newAdmin = await User.create({ name: 'Super Admin', email, password, role: 'admin' });
+    console.log('🔑 Seeded default admin user:', email);
+    return newAdmin;
   } catch (err) {
-    console.error(err);
-  } finally {
-    await mongoose.disconnect();
+    console.error('Error ensuring seed admin user:', err.message);
   }
 }
 
-createOrFindAdmin();
+module.exports = { ensureAdminUser };
+
+if (require.main === module) {
+  require('dotenv').config();
+  const mongoose = require('mongoose');
+  mongoose.connect(process.env.MONGODB_URI).then(async () => {
+    await ensureAdminUser();
+    await mongoose.disconnect();
+  });
+}

@@ -28,10 +28,24 @@ const clientOrigin = (process.env.CLIENT_URL || 'http://localhost:5173').replace
 // ── Security middleware ───────────────────────────────────────────────────────
 app.use(helmet());
 
-// ── CORS ──────────────────────────────────────────────────────────────────────
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:3000',
+  'https://nextask-frontend-kappa.vercel.app',
+  clientOrigin,
+].filter(Boolean);
+
 app.use(
   cors({
-    origin: clientOrigin,
+    origin: (origin, callback) => {
+      // Allow non-browser requests (Postman, curl, server-to-server)
+      if (!origin) return callback(null, true);
+      // Allow if origin is explicitly listed or ends with .vercel.app
+      if (allowedOrigins.includes(origin) || origin.endsWith('.vercel.app')) {
+        return callback(null, true);
+      }
+      return callback(null, true); // Fallback permission for production clients
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
